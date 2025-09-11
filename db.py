@@ -28,8 +28,8 @@ def connect_db():
 
 def insert_data(records: list):
     """
-    get_lines() datasını DB'ye yazar.
-    Eğer aynı Id varsa update eder.
+    Writes the data from get_lines() to the database.
+    If the same Id exists, it updates the record.
     """
     if not records:
         return
@@ -46,8 +46,8 @@ def insert_data(records: list):
 
 def update_status(statuses: list):
     """
-    get_status() datasını DB'deki kayıtlarla eşleştirip günceller.
-    Varsayılan: status=False, eşleşirse status=True.
+    Matches the data from get_status() with the records in the DB and updates them.
+    Default: status=False, if matched then status=True.
     """
     if statuses is None:
         return
@@ -57,10 +57,9 @@ def update_status(statuses: list):
         {"$set": {"status": False, "status_description": None, "update_date": None}}
     )
 
-    # gelen statusleri işliyoruz
     for status in statuses:
         collection.update_one(
-            {"Id": status["LineId"]},  # LineId ↔ Id eşleşmesi
+            {"Id": status["LineId"]},
             {"$set": {
                 "status": True,
                 "status_description": status["Description"],
