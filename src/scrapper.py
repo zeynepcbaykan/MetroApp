@@ -48,8 +48,9 @@ def get_status():
         print("Failed to fetch status")
         return []
 
-
+'''
 # Test the function
 statuses = get_status()
 for status in statuses:
     print(status)
+'''
