@@ -5,10 +5,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
-MONGO_DB = os.getenv("MONGO_DB", "metro_ariza")
-MONGO_COLLECTION = os.getenv("MONGO_COLLECTION", "arizalar")
+MONGO_DB = os.getenv("MONGO_DB")
+MONGO_COLLECTION = os.getenv("MONGO_COLLECTION")
 
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGO_URI, tls=True, tlsAllowInvalidCertificates=True)
 db = client[MONGO_DB]
 collection = db[MONGO_COLLECTION]
 
