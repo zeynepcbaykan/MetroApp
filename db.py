@@ -55,19 +55,15 @@ def update_status(statuses: list):
     if not statuses:
         return
     
-    collection.update_many(
-        {"status": True},  # Just line was previously marked as having an issue
-        {"$set": {
-            "status": False,
-            "status_description": None,
-            "update_date": statuses[0]["UpdateDate"]
-        }}
-    )
-
-    collection.update_many(
-        {},
-        {"$set": {"status": False, "status_description": None, "update_date": None}}
-    )
+    if statuses[0]["LineId"] == 0:
+        collection.update_many(
+            {"status": True},  # Just line was previously marked as having an issue
+            {"$set": {
+                "status": False,
+                "status_description": None,
+                "update_date": statuses[0]["UpdateDate"]
+            }}
+        )
 
     for status in statuses:
         collection.update_one(
