@@ -40,7 +40,7 @@ for line in lines:
 
 def get_status():
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(f"{BASE_URL}/MetroMobile/V2/GetServiceStatuses", timeout=10)
         response.raise_for_status()
         data = response.json()
 
