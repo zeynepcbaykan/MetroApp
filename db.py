@@ -37,7 +37,6 @@ def connect_db() -> bool:
         logging.error(f"MongoDB connection error: {e}")
         return False
 
-
 def insert_data(records: list):
     """
     Writes the data from get_lines() to the database.
@@ -53,13 +52,23 @@ def insert_data(records: list):
         if "Id" not in record:
             logging.warning(f"Record missing 'Id' field, skipping: {record}")
             continue
+        
+        record.update({
+            "status": False,
+            "status_description": None,
+            "update_date": None,
+            "LineId": None,       
+            "Description": None, 
+            "Name": record.get("Name")  
+        })
+        
         try:
-            collection.update_one(
+            collection.update_many(
                 {"Id": record["Id"]},
                 {"$set": record},
                 upsert=True
             )
-            inserted += 1
+            inserted_count += 1
         except Exception as e:
             logging.error(f"Error inserting/updating record {record['Id']}: {e}")
     logging.info(f"{inserted_count}/{len(records)} records inserted/updated.")
