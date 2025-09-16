@@ -45,13 +45,25 @@ def insert_data(records: list):
 
 
 def update_status(statuses: list):
+
     """
     Matches the data from get_status() with the records in the DB and updates them.
-    Default: status=False, if matched then status=True.
+    - If API LineId = 0, it means no issues on any line.
+    - Default: status=False, if matched then status=True.
     """
-    if statuses is None:
+
+    if not statuses:
         return
     
+    collection.update_many(
+        {"status": True},  # Just line was previously marked as having an issue
+        {"$set": {
+            "status": False,
+            "status_description": None,
+            "update_date": statuses[0]["UpdateDate"]
+        }}
+    )
+
     collection.update_many(
         {},
         {"$set": {"status": False, "status_description": None, "update_date": None}}
@@ -66,4 +78,4 @@ def update_status(statuses: list):
                 "update_date": status["UpdateDate"]
             }}
         )
-    print(f"{len(statuses)} line status updated.")
+    print(f"{len(statuses)} line status updated., {statuses}")
