@@ -7,7 +7,7 @@ BASE_URL = "https://api.ibb.gov.tr/MetroIstanbul/api"
 
 def get_lines() -> list[dict]:
     try:
-        response = requests.get(f"{BASE_URL}/MetroMobile/V2/GetLines", timeout=10)
+        response = requests.get(f"{BASE_URL}/MetroMobile/V2/GetLines")
         response.raise_for_status()  # HTTP hataları exception olarak fırlatır
         data = response.json()
 
@@ -40,7 +40,7 @@ for line in lines:
 
 def get_status():
     try:
-        response = requests.get(f"{BASE_URL}/MetroMobile/V2/GetServiceStatuses", timeout=10)
+        response = requests.get(f"{BASE_URL}/MetroMobile/V2/GetServiceStatuses")
         response.raise_for_status()
         data = response.json()
 
