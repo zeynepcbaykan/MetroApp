@@ -1,6 +1,6 @@
 import sys
-from scraper import get_lines, get_status
-from db import connect_db, insert_data, update_status
+from src.scraper import get_lines, get_status
+from src.db import connect_db, insert_data, update_status
 
 
 def setup_db():
