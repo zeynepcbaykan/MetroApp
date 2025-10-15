@@ -1,12 +1,17 @@
 import os
 from pymongo import MongoClient
 import requests
+import ssl
 
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DB = os.getenv("MONGO_DB")
 MONGO_COLLECTION = os.getenv("MONGO_COLLECTION")
 
-client = MongoClient(MONGO_URI)
+client = MongoClient(
+    MONGO_URI,
+    tls=True,
+    tlsAllowInvalidCertificates=True
+)
 db = client[MONGO_DB]
 collection = db[MONGO_COLLECTION]
 
