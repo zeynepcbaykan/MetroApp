@@ -1,7 +1,6 @@
 import os
 import logging
 from pymongo import MongoClient
-from pymongo.driver_info import DriverInfo
 
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DB = os.getenv("MONGO_DB")
@@ -10,9 +9,7 @@ MONGO_COLLECTION = os.getenv("MONGO_COLLECTION")
 logging.basicConfig(level=logging.INFO)
 
 def get_client():
-    """MongoDB client - son deneme"""
     try:
-        # En basit bağlantı - hiçbir SSL parametresi yok
         client = MongoClient(
             MONGO_URI,
             serverSelectionTimeoutMS=30000
