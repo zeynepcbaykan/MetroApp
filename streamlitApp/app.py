@@ -53,20 +53,30 @@ def get_metro_icon_path(line_name):
     
     return None
 
-def play_audio_hidden(audio_file):
-    # app.py'nin bulunduğu dizinden relative path
-    script_dir = os.path.dirname(__file__)
-    file_path = os.path.join(script_dir, audio_file)
-    
-    with open(file_path, 'rb') as f:
-        audio_bytes = f.read()
-    audio_base64 = base64.b64encode(audio_bytes).decode()
-    audio_html = f"""
-        <audio autoplay style="display:none;">
-            <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
-        </audio>
-    """
-    st.markdown(audio_html, unsafe_allow_html=True)
+def get_asset_path(filename):
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(script_dir, "assets", filename)
+
+def play_audio_hidden(audio_filename):
+    try:
+        audio_path = get_asset_path(audio_filename)
+        
+        # Debug için
+        if not os.path.exists(audio_path):
+            st.error(f"Ses dosyası bulunamadı: {audio_path}")
+            return
+            
+        with open(audio_path, 'rb') as f:
+            audio_bytes = f.read()
+        audio_base64 = base64.b64encode(audio_bytes).decode()
+        audio_html = f"""
+            <audio autoplay style="display:none;">
+                <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
+            </audio>
+        """
+        st.markdown(audio_html, unsafe_allow_html=True)
+    except Exception as e:
+        st.error(f"Ses çalma hatası: {str(e)}")
 
 @st.cache_resource
 def get_database():
@@ -86,8 +96,14 @@ with col2:
 with col3:
     st.write("")
     if st.button("🔊"):
-        play_audio_hidden("assets/train_sound.mp3")  # ./ kaldırıldı
-        st.image("assets/metro.gif", width=500)
+        play_audio_hidden("train_sound.mp3") 
+        
+        # GIF için de aynı yaklaşım
+        gif_path = get_asset_path("metro.gif")
+        if os.path.exists(gif_path):
+            st.image(gif_path, width=500)
+        else:
+            st.warning(f"GIF bulunamadı: {gif_path}")
 
 # Veri çek
 try:
