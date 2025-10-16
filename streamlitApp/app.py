@@ -73,7 +73,7 @@ def get_database():
 # Başlık ve refresh butonu
 col1, col2, col3 = st.columns([12, 2, 2])
 with col1:
-    st.title("🚇 İstanbul Metro Durum Takibi")
+    st.title("🚇 İbb Metro Durum Takibi")
 with col2:
     st.write("")  
     if st.button("🔄 Yenile"):
