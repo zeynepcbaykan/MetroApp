@@ -54,7 +54,11 @@ def get_metro_icon_path(line_name):
     return None
 
 def play_audio_hidden(audio_file):
-    with open(audio_file, 'rb') as f:
+    # app.py'nin bulunduğu dizinden relative path
+    script_dir = os.path.dirname(__file__)
+    file_path = os.path.join(script_dir, audio_file)
+    
+    with open(file_path, 'rb') as f:
         audio_bytes = f.read()
     audio_base64 = base64.b64encode(audio_bytes).decode()
     audio_html = f"""
@@ -82,9 +86,8 @@ with col2:
 with col3:
     st.write("")
     if st.button("🔊"):
-        play_audio_hidden("./assets/train_sound.mp3")
-        st.image("./assets/metro.gif", width=500)
-
+        play_audio_hidden("assets/train_sound.mp3")  # ./ kaldırıldı
+        st.image("assets/metro.gif", width=500)
 
 # Veri çek
 try:
