@@ -6,9 +6,9 @@ import os
 import base64
 
 st.set_page_config(
-    page_title="İBB Metro Durum Takibi",
+    page_title="İBB Metro Arıza Takibi",
     page_icon="🚇",
-    layout="wide"
+    layout="wide",
 )
 
 # İkon eşleme fonksiyonu
@@ -87,15 +87,15 @@ def get_database():
 # Başlık ve refresh butonu
 col1, col2, col3 = st.columns([12, 2, 2])
 with col1:
-    st.title("🚇 İbb Metro Durum Takibi")
-with col2:
+    st.title("🚇 İbb Metro Arıza Takibi")
+with col3:
     st.write("")  
     if st.button("🔄 Yenile"):
         st.cache_resource.clear()
         st.rerun()
-with col3:
+with col2:
     st.write("")
-    if st.button("🔊"):
+    if st.button("📣 Düüüt!"):
         play_audio_hidden("train_sound.mp3") 
         
         # GIF için de aynı yaklaşım
@@ -151,7 +151,6 @@ if lines:
                 if line.get('update_date'):
                     st.caption(f"🕐 Son güncelleme: {line['update_date']}")
             
-            st.markdown("---")
     else:
         st.success("✅ Tüm hatlar aktif çalışıyor!")
 
