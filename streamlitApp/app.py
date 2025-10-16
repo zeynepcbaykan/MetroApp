@@ -3,6 +3,7 @@ from pymongo import MongoClient
 import pandas as pd
 from PIL import Image
 import os
+import base64
 
 st.set_page_config(
     page_title="İBB Metro Durum Takibi",
@@ -46,13 +47,22 @@ def get_metro_icon_path(line_name):
     
     for code, icon_file in icon_map.items():
         if line_name_upper.startswith(code):
-            # Mutlak yol kullan
             path = os.path.join(os.path.dirname(__file__), "assets", "metro_icons", icon_file)
             if os.path.exists(path):
                 return path
     
     return None
 
+def play_audio_hidden(audio_file):
+    with open(audio_file, 'rb') as f:
+        audio_bytes = f.read()
+    audio_base64 = base64.b64encode(audio_bytes).decode()
+    audio_html = f"""
+        <audio autoplay style="display:none;">
+            <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
+        </audio>
+    """
+    st.markdown(audio_html, unsafe_allow_html=True)
 
 @st.cache_resource
 def get_database():
@@ -61,7 +71,7 @@ def get_database():
     return client["metroapp"]["metroapp"]
 
 # Başlık ve refresh butonu
-col1, col2 = st.columns([12, 1])
+col1, col2, col3 = st.columns([12, 2, 2])
 with col1:
     st.title("🚇 İstanbul Metro Durum Takibi")
 with col2:
@@ -69,7 +79,12 @@ with col2:
     if st.button("🔄 Yenile"):
         st.cache_resource.clear()
         st.rerun()
-st.markdown("---")
+with col3:
+    st.write("")
+    if st.button("🔊"):
+        play_audio_hidden("./assets/train_sound.mp3")
+        st.image("./assets/metro.gif", width=500)
+
 
 # Veri çek
 try:
@@ -78,10 +93,8 @@ try:
 except Exception as e:
     st.error(f"Veritabanı bağlantı hatası: {e}")
     lines = []
-
-
+        
 if lines:
-    # İstatistikler
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("Toplam Hat", len(lines))
