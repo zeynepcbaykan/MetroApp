@@ -1,10 +1,14 @@
 import requests
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 BASE_URL = "https://api.ibb.gov.tr/MetroIstanbul/api"
+
+def get_turkey_time():
+    """Türkiye saati (UTC+3)"""
+    return (datetime.utcnow() + timedelta(hours=3)).strftime("%d.%m.%Y %H:%M")
 
 def get_lines() -> list[dict]:
     try:
@@ -33,13 +37,6 @@ def get_lines() -> list[dict]:
         logging.error(f"Error parsing JSON for lines: {e}")
         return []
 
-'''
-# Test the function
-lines = get_lines()
-for line in lines:
-    print(line)
-'''
-
 def get_status():
     try:
         response = requests.get(f"{BASE_URL}/MetroMobile/V2/GetServiceStatuses")
@@ -51,10 +48,10 @@ def get_status():
             if item.get("LineId") is None:
                 continue
             
-            # UpdateDate kontrol et - eğer 0001-01-01 ise okunabilir formatta şu anki zamanı kullan
+            # UpdateDate kontrol et - eğer 0001-01-01 ise Türkiye saatini kullan
             update_date = item.get("UpdateDate")
             if not update_date or update_date.startswith("0001-01-01"):
-                update_date = datetime.utcnow().strftime("%d.%m.%Y %H:%M")  # ✅ Okunabilir format
+                update_date = get_turkey_time() 
             
             results.append({
                 "Name": item.get("LineName"),
@@ -72,11 +69,3 @@ def get_status():
     except ValueError as e:
         logging.error(f"Error parsing JSON for statuses: {e}")
         return []
-
-
-'''
-# Test the function
-statuses = get_status()
-for status in statuses:
-    print(status)
-'''

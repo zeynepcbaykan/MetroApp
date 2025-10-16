@@ -1,7 +1,7 @@
 import os
 import logging
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime, timedelta
 
 MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DB = os.getenv("MONGO_DB")
@@ -31,6 +31,9 @@ def connect_db() -> bool:
     except Exception as e:
         logging.error(f"MongoDB connection error: {e}")
         return False
+
+def get_turkey_time():
+    return (datetime.utcnow() + timedelta(hours=3)).strftime("%d.%m.%Y %H:%M")
 
 def insert_data(records: list):
     if not records:
@@ -80,11 +83,10 @@ def update_status(statuses: list):
         
         # Eğer LineId=0 ise tüm hatlar normal
         if statuses[0].get("LineId") == 0:
-            # update_date null veya 0001-01-01 ise şu anki zamanı kullan
+            # update_date null veya 0001-01-01 ise Türkiye saatini kullan
             update_date = statuses[0].get("UpdateDate")
             if not update_date or update_date.startswith("0001-01-01"):
-                # Türkiye saati (UTC+3) ve okunabilir format
-                update_date = datetime.utcnow().strftime("%d.%m.%Y %H:%M")
+                update_date = get_turkey_time()  
             
             result = collection.update_many(
                 {},
@@ -97,18 +99,15 @@ def update_status(statuses: list):
             logging.info(f"All line statuses set to False. {result.modified_count} records updated.")
             return
 
-        # Spesifik hatları güncelle
         updated = 0
         for status in statuses:
             line_id = status.get("LineId")
             if not line_id:
                 continue
             
-            # update_date null veya 0001-01-01 ise şu anki zamanı kullan
             update_date = status.get("UpdateDate")
             if not update_date or update_date.startswith("0001-01-01"):
-                # Türkiye saati (UTC+3) ve okunabilir format
-                update_date = datetime.utcnow().strftime("%d.%m.%Y %H:%M")
+                update_date = get_turkey_time() 
             
             collection.update_one(
                 {"Id": line_id},
