@@ -8,9 +8,7 @@
 - [Teknoloji Stack](#-teknoloji-stack)
 - [Mimari](#-mimari)
 - [Proje Yapısı](#-proje-yapısı)
-- [Ekran Görüntüleri](#-ekran-görüntüleri)
 - [Lisans](#-lisans)
-- [İletişim](#-i̇letişim)
 
 ---
 
@@ -22,6 +20,10 @@
 
 Tüm motivasyonum açıköğretim sınavına giderken yolda metronun çalışmadığını öğrendim; **"Bir yerden bakamıyor muyuz buna ya?"** dediğim ana dayanıyor. 
 
+### Demo
+
+Canlı uygulamaya [buradan](https://metrohizmetdurumu.streamlit.app/) ulaşabilirsiniz.
+
 ---
 
 ## 🛠️ Teknoloji Stack
@@ -31,7 +33,7 @@ Tüm motivasyonum açıköğretim sınavına giderken yolda metronun çalışmad
 | Teknoloji | Kullanım Amacı |
 |-----------|----------------|
 | **Azure Functions** | Serverless data collection (Timer Trigger) |
-| **Python 3.11** | Core programming language |
+| **Python** | Core programming language |
 | **Azure Cosmos DB** | NoSQL database (MongoDB API) |
 | **pymongo** | Database driver |
 | **requests** | HTTP client for API calls |
@@ -53,7 +55,6 @@ Tüm motivasyonum açıköğretim sınavına giderken yolda metronun çalışmad
 │                     │
 │  • API'den veri çek │
 │  • Veriyi işle      │
-│  • Tarih formatla   │
 └──────────┬──────────┘
            │ MongoDB Write
            ↓
@@ -108,7 +109,7 @@ istanbul-metro-tracker/
 │   │
 │   ├── 📂 .streamlit/               # Streamlit config
 │   │   ├── config.toml
-│   │   └── secrets.toml            # 
+│   │   └── secrets.toml            # Db connection strings, keys
 │   │
 │   └── requirements.txt            # Python dependencies
 │
