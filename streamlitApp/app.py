@@ -6,7 +6,7 @@ import os
 import base64
 
 st.set_page_config(
-    page_title="İBB Metro Arıza Takibi",
+    page_title="İBB Metro Hizmet Durumu",
     page_icon="🚇",
     layout="wide",
 )
@@ -87,7 +87,7 @@ def get_database():
 # Başlık ve refresh butonu
 col1, col2, col3 = st.columns([12, 2, 2])
 with col1:
-    st.title("🚇 İbb Metro Arıza Takibi")
+    st.title("🚇 İbb Metro Hizmet Durumu Takibi")
 with col3:
     st.write("")  
     if st.button("🔄 Yenile"):
@@ -98,7 +98,7 @@ with col2:
     if st.button("📣 Düüüt!"):
         play_audio_hidden("train_sound.mp3") 
         
-        # GIF için de aynı yaklaşım
+        # GIF kısmı
         gif_path = get_asset_path("metro.gif")
         if os.path.exists(gif_path):
             st.image(gif_path, width=500)
@@ -166,7 +166,6 @@ if lines:
             status_icon = "🔴" if line.get('status') else "🟢"
             
             with st.container(border=True):
-                # İkonu göster
                 if icon_path and os.path.exists(icon_path):
                     try:
                         icon = Image.open(icon_path)
