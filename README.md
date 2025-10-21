@@ -1,7 +1,5 @@
 # 🚇 İstanbul Metro Durum Takip Sistemi
 
----
-
 ## 📖 İçindekiler
 
 - [Proje Hakkında](#-proje-hakkında)
@@ -9,8 +7,6 @@
 - [Mimari](#-mimari)
 - [Proje Yapısı](#-proje-yapısı)
 - [Lisans](#-lisans)
-
----
 
 ## 🎯 Proje Hakkında
 
@@ -24,8 +20,6 @@ Tüm motivasyonum açıköğretim sınavına giderken yolda metronun çalışmad
 
 Canlı uygulamaya [buradan](https://metrohizmetdurumu.streamlit.app/) ulaşabilirsiniz.
 
----
-
 ## 🛠️ Teknoloji Stack
 
 ### Backend
@@ -37,8 +31,6 @@ Canlı uygulamaya [buradan](https://metrohizmetdurumu.streamlit.app/) ulaşabili
 | **Azure Cosmos DB** | NoSQL database (MongoDB API) |
 | **pymongo** | Database driver |
 | **requests** | HTTP client for API calls |
-
----
 
 ## 🏗️ Mimari
 
@@ -81,8 +73,6 @@ Canlı uygulamaya [buradan](https://metrohizmetdurumu.streamlit.app/) ulaşabili
 └─────────────────────┘
 ```
 
----
-
 ## 📁 Proje Yapısı
 ```
 istanbul-metro-tracker/
@@ -118,15 +108,11 @@ istanbul-metro-tracker/
 └── LICENSE                         # MIT License
 ```
 
----
-
 ## 📈 Gelecek Geliştirmeler
 
 - [ ] **Push Notifications**: Email/SMS bildirimleri
 - [ ] **Historical Data**: Geçmiş veri analizi ve trendler
 - [ ] **Social Media Integration**: Twitter hesabı açıklamaları için bot
-
----
 
 ## 📝 Lisans
 
