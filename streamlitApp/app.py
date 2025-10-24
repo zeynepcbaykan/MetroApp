@@ -146,7 +146,7 @@ if lines:
                     st.markdown("### 🚇")
             
             with col2:
-                st.error(f"**{line['Name']}**")
+                st.error(f"**{line['LongDescription']}**")
                 st.write(f"📝 {line.get('status_description', 'Bilgi yok')}")
                 if line.get('update_date'):
                     st.caption(f"🕐 Son güncelleme: {line['update_date']}")
