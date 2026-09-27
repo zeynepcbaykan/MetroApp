@@ -109,7 +109,7 @@ def update_status(statuses: list):
             if not update_date or update_date.startswith("0001-01-01"):
                 update_date = get_turkey_time() 
             
-            collection.update_one(
+            result = collection.update_one(
                 {"Id": line_id},
                 {"$set": {
                     "status": True,
@@ -117,9 +117,19 @@ def update_status(statuses: list):
                     "update_date": update_date
                 }}
             )
-            updated += 1
 
-        logging.info(f"{updated}/{len(statuses)} line statuses updated.")
+            logging.info(
+                f"LineId={line_id} | matched={result.matched_count} | "
+                f"modified={result.modified_count} | "
+                f"description={status.get('Description')} | update_date={update_date}"
+            )
+
+            if result.matched_count > 0:
+                updated += 1
+            else:
+                logging.warning(f"No database record found for LineId={line_id} (filter: Id={line_id})")
+
+        logging.info(f"{updated}/{len(statuses)} line statuses matched in database.")
     finally:
         if client:
             client.close()
