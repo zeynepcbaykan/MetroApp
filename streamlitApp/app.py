@@ -184,6 +184,9 @@ if lines:
     st.markdown("---")
 
 
+
+st.write("PyMongo version:", pymongo.version)
+
 #     # Detaylı Tablo
 #     with st.expander("📋 Detaylı Tablo Görünümü"):
 #         df = pd.DataFrame([{
