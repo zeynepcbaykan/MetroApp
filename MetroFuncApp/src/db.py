@@ -70,66 +70,81 @@ def insert_data(records: list):
     finally:
         if client:
             client.close()
-
+            
 def update_status(statuses: list):
-    if not statuses:
-        return
-    
     client = None
+
     try:
         client = get_client()
         db = client[MONGO_DB]
         collection = db[MONGO_COLLECTION]
-        
-        # Eğer LineId=0 ise tüm hatlar normal
-        if statuses[0].get("LineId") == 0:
-            # update_date null veya 0001-01-01 ise Türkiye saatini kullan
-            update_date = statuses[0].get("UpdateDate")
-            if not update_date or update_date.startswith("0001-01-01"):
-                update_date = get_turkey_time()  
-            
-            result = collection.update_many(
-                {},
-                {"$set": {
+
+        current_time = get_turkey_time()
+
+        # Önce bütün hatları normal/aktif duruma getir.
+        reset_result = collection.update_many(
+            {},
+            {
+                "$set": {
                     "status": False,
                     "status_description": None,
-                    "update_date": update_date
-                }}
-            )
-            logging.info(f"All line statuses set to False. {result.modified_count} records updated.")
+                    "update_date": current_time
+                }
+            }
+        )
+
+        logging.info(
+            f"All lines reset to normal. "
+            f"{reset_result.modified_count} records modified."
+        )
+
+        # API hiç arıza döndürmediyse bütün hatlar normaldir.
+        if not statuses:
+            logging.info("No service disruptions returned by API.")
             return
 
         updated = 0
+
+        # API'den dönen hatlar arızalıdır.
         for status in statuses:
             line_id = status.get("LineId")
+
+            # LineId=0 tüm hatların normal olduğunu ifade ediyorsa
+            # zaten yukarıda hepsini False yaptık.
             if not line_id:
                 continue
-            
+
             update_date = status.get("UpdateDate")
+
             if not update_date or update_date.startswith("0001-01-01"):
-                update_date = get_turkey_time() 
-            
+                update_date = current_time
+
             result = collection.update_one(
                 {"Id": line_id},
-                {"$set": {
-                    "status": True,
-                    "status_description": status.get("Description"),
-                    "update_date": update_date
-                }}
+                {
+                    "$set": {
+                        "status": True,
+                        "status_description": status.get("Description"),
+                        "update_date": update_date
+                    }
+                }
             )
 
             logging.info(
-                f"LineId={line_id} | matched={result.matched_count} | "
+                f"LineId={line_id} | "
+                f"matched={result.matched_count} | "
                 f"modified={result.modified_count} | "
-                f"description={status.get('Description')} | update_date={update_date}"
+                f"description={status.get('Description')} | "
+                f"update_date={update_date}"
             )
 
             if result.matched_count > 0:
                 updated += 1
-            else:
-                logging.warning(f"No database record found for LineId={line_id} (filter: Id={line_id})")
 
-        logging.info(f"{updated}/{len(statuses)} line statuses matched in database.")
+        logging.info(
+            f"{updated}/{len(statuses)} disruption statuses applied."
+        )
+
     finally:
         if client:
             client.close()
