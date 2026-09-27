@@ -43,6 +43,8 @@ def get_status():
         response.raise_for_status()
         data = response.json()
 
+        logging.info(f"API RAW RESPONSE: {data}")
+
         results = []
         for item in data.get("Data", []):
             if item.get("LineId") is None:
