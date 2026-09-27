@@ -189,6 +189,9 @@ import streamlit as st
 
 st.write("PyMongo version:", pymongo.version)
 
+
+st.write("PyMongo version:", pymongo.version)
+
 #     # Detaylı Tablo
 #     with st.expander("📋 Detaylı Tablo Görünümü"):
 #         df = pd.DataFrame([{
