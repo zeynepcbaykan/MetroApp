@@ -4,6 +4,8 @@ import pandas as pd
 from PIL import Image
 import os
 import base64
+import pymongo
+import streamlit as st
 
 st.set_page_config(
     page_title="İBB Metro Hizmet Durumu",
@@ -182,7 +184,10 @@ if lines:
                     st.caption(f"🕐 {line['update_date']}")
 
     st.markdown("---")
+import pymongo
+import streamlit as st
 
+st.write("PyMongo version:", pymongo.version)
 
 #     # Detaylı Tablo
 #     with st.expander("📋 Detaylı Tablo Görünümü"):
